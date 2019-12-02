@@ -1,23 +1,32 @@
 import React from 'react';
 
 function Form(props) {
-    const {property, value, item, itemList} = props.state
+    const {property, value, item, itemCount} = props.state
+    const {dispatch} = props
 
     function handleOnChange(event) {
         const {name, value} = event.target
-        props.dispatch({field: name, value: value})
+        dispatch({field: name, value: value})
     }
 
     function handleAddToItem() {
         const addProperty = item
         addProperty[`${property}`] = value
-        props.dispatch({field: item, value: addProperty})
+        dispatch({field: "item", value: addProperty})
+        dispatch({field: "property", value: ""})
+        dispatch({field: "value", value: ""})
     }
 
-    function handleAddToItemList() {
-        const addObject = itemList
-        addObject.push(item)
-        props.dispatch({field: itemList, value: addObject})
+    function handleKeyPress(event) {
+        if (event.key === "Enter") {handleAddToItem()} 
+    }
+
+    function handleAddItemToState() {
+        dispatch({field: `${"item" + (itemCount + 1)}`, value: item})           
+        dispatch({field: "itemCount", value: itemCount + 1})
+        dispatch({field: "property", value: ""})
+        dispatch({field: "value", value: ""})
+        dispatch({field: "item", value: {}})
     }
 
     return (
@@ -27,15 +36,17 @@ function Form(props) {
                 name="property"
                 value={property}
                 onChange={handleOnChange}
+                onKeyPress={handleKeyPress}
             />
             <input
                 placeholder="Value"
                 name="value"
                 value={value}
                 onChange={handleOnChange}
+                onKeyPress={handleKeyPress}
             />
             <button onClick={handleAddToItem}>Add to List</button>
-            <p><button onClick={handleAddToItemList}>Save Object</button></p>
+            <p><button onClick={handleAddItemToState}>Save Object</button></p>
         </div>
     );
 }
