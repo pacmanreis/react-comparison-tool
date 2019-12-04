@@ -6,6 +6,7 @@ function DisplayItem(props) {
     function handleRemoveProperty(key) {
         let itemRemove = {...item};
         delete itemRemove[key]
+        Object.keys(item).length === 1 && dispatch({field: "setName", value: true})
         dispatch({field: "item", value: itemRemove})
     }
 
