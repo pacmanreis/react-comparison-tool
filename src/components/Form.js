@@ -1,7 +1,7 @@
 import React from 'react';
 
 function Form(props) {
-    const {property, value, item, itemCount} = props.state
+    const {setName, property, value, item, itemCount} = props.state
     const {dispatch} = props
 
     function handleOnChange(event) {
@@ -11,10 +11,11 @@ function Form(props) {
 
     function handleAddToItem() {
         const addProperty = item
-        addProperty[`${property}`] = value
+        setName ? addProperty["name"] = value : addProperty[`${property}`] = value
         dispatch({field: "item", value: addProperty})
         dispatch({field: "property", value: ""})
         dispatch({field: "value", value: ""})
+        dispatch({field: "setName", value: false})
     }
 
     function handleKeyPress(event) {
@@ -27,14 +28,16 @@ function Form(props) {
         dispatch({field: "property", value: ""})
         dispatch({field: "value", value: ""})
         dispatch({field: "item", value: {}})
+        dispatch({field: "setName", value: true})
     }
 
     return (
         <div>
             <input
-                placeholder="Property"
+                placeholder={setName ? `${"item" + (itemCount + 1)}` : "Property"}
                 name="property"
                 value={property}
+                disabled={setName}
                 onChange={handleOnChange}
                 onKeyPress={handleKeyPress}
             />
@@ -46,7 +49,7 @@ function Form(props) {
                 onKeyPress={handleKeyPress}
             />
             <button onClick={handleAddToItem}>Add to List</button>
-            <p><button onClick={handleAddItemToState}>Save Object</button></p>
+            <p><button onClick={handleAddItemToState} disabled={Object.keys(item).length < 2}>Save Object</button></p>
         </div>
     );
 }

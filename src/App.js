@@ -6,10 +6,12 @@ import DisplayItemList from './components/DisplayItemList'
 
 function App() {
   const initialState = {
+    setName: true,
     property: "",
     value: "",
     item: {},
-    itemCount: 0
+    itemCount: 0,
+    addToList: false
   }
 
   function reducer(state, {field, value}) {
@@ -21,13 +23,11 @@ function App() {
 
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  console.log(state)
-
   return (
     <div>
       <h1>Comparison Tool</h1>
       <Form state={state} dispatch={dispatch} />
-      {state.itemCount >= 2 ? <><DisplayItemList item={state.item1}/><DisplayItemList item={state.item2}/></> : <DisplayItem item={state.item} dispatch={dispatch}/>}
+      {state.itemCount >= 2 ? <DisplayItemList state={state}/> : <DisplayItem item={state.item} dispatch={dispatch}/>}
     </div>
   );
 }
